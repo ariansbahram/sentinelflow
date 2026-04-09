@@ -1,0 +1,104 @@
+[
+  {
+    "alert_id": 101,
+    "alert_type": "phishing",
+    "title": "Suspicious password reset email",
+    "content": "Urgent: Your mailbox has been suspended. Click http://secure-login-alert.com immediately to restore access.",
+    "severity": "medium",
+    "action": "review",
+    "score": 0.5,
+    "timestamp": "2026-04-09T20:51:14.230337"
+  },
+  {
+    "alert_id": 101,
+    "alert_type": "phishing",
+    "title": "Suspicious password reset email",
+    "content": "Urgent: Your mailbox has been suspended. Click http://secure-login-alert.com immediately to restore access.",
+    "severity": "medium",
+    "action": "review",
+    "score": 0.5,
+    "timestamp": "2026-04-09T20:57:30.982270"
+  },
+  {
+    "alert_id": 104,
+    "alert_type": "benign",
+    "title": "HR newsletter",
+    "content": "Monthly HR newsletter with policy reminders and upcoming events.",
+    "severity": "low",
+    "action": "close",
+    "score": 0.12,
+    "timestamp": "2026-04-09T21:08:56.514396"
+  },
+  {
+    "alert_id": 101,
+    "alert_type": "phishing",
+    "title": "Suspicious password reset email",
+    "content": "Urgent: Your mailbox has been suspended. Click http://secure-login-alert.com immediately to restore access.",
+    "severity": "medium",
+    "action": "review",
+    "score": 0.5,
+    "timestamp": "2026-04-09T21:08:59.639488"
+  },
+  {
+    "alert_id": 101,
+    "alert_type": "phishing",
+    "title": "Suspicious password reset email",
+    "content": "Urgent: Your mailbox has been suspended. Click http://secure-login-alert.com immediately to restore access.",
+    "severity": "medium",
+    "action": "review",
+    "score": 0.5,
+    "timestamp": "2026-04-09T21:09:01.404954"
+  },
+  {
+    "alert_id": 104,
+    "alert_type": "benign",
+    "title": "HR newsletter",
+    "content": "Monthly HR newsletter with policy reminders and upcoming events.",
+    "severity": "low",
+    "action": "close",
+    "score": 0.12,
+    "timestamp": "2026-04-09T21:09:01.859630"
+  },
+  {
+    "alert_id": 101,
+    "alert_type": "phishing",
+    "title": "Suspicious password reset email",
+    "content": "Urgent: Your mailbox has been suspended. Click http://secure-login-alert.com immediately to restore access.",
+    "severity": "medium",
+    "action": "review",
+    "score": 0.5,
+    "timestamp": "2026-04-09T21:09:02.091269"
+  },
+  {
+    "alert_id": 101,
+    "alert_type": "phishing",
+    "title": "Suspicious password reset email",
+    "content": "Urgent: Your mailbox has been suspended. Click http://secure-login-alert.com immediately to restore access.",
+    "severity": "medium",
+    "action": "review",
+    "score": 0.5,
+    "timestamp": "2026-04-09T21:09:02.353163"
+  },
+  {
+    "alert_id": 103,
+    "alert_type": "dlp",
+    "title": "External file transfer",
+    "content": "Employee emailed file client_ssn_export.xlsx to an external Gmail account.",
+    "severity": "low",
+    "action": "review",
+    "score": 0.33,
+    "timestamp": "2026-04-09T21:09:14.218208"
+  },
+  {
+    "alert_id": 101,
+    "alert_type": "phishing",
+    "title": "Suspicious password reset email",
+    "content": "Urgent: Your mailbox has been suspended. Click http://secure-login-alert.com immediately to restore access.",
+    "severity": "medium",
+    "action": "review",
+    "score": 0.5,
+    "execution_status": "queued",
+    "execution_action": "Simulated: routed alert to analyst review queue.",
+    "timestamp": "2026-04-09T21:57:11.929763"
+  }
+]

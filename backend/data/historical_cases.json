@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "type": "phishing",
+    "content": "Urgent email asking user to reset password through a suspicious login link.",
+    "outcome": "escalate",
+    "severity": "high",
+    "summary": "Credential harvesting attempt using urgent language and malicious link."
+  },
+  {
+    "id": 2,
+    "type": "login_anomaly",
+    "content": "Multiple failed logins from a foreign IP followed by a successful login.",
+    "outcome": "review",
+    "severity": "medium",
+    "summary": "Potential account compromise due to abnormal login pattern."
+  },
+  {
+    "id": 3,
+    "type": "dlp",
+    "content": "Employee sent spreadsheet containing SSNs to an external email address.",
+    "outcome": "escalate",
+    "severity": "high",
+    "summary": "Sensitive data exfiltration involving personally identifiable information."
+  },
+  {
+    "id": 4,
+    "type": "benign",
+    "content": "Weekly internal HR newsletter with no attachments or suspicious links.",
+    "outcome": "close",
+    "severity": "low",
+    "summary": "Benign internal communication incorrectly flagged."
+  }
+]
