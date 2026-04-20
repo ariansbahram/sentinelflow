@@ -66,10 +66,3 @@ SentinelFlow demonstrates how agentic AI can:
 - Support security teams with context-aware decision-making
 
 Rather than focusing on model complexity, the project emphasizes practical system design aligned with real-world enterprise needs.
-
----
-
-## 📬 Contact
-
-Built by Arian Bahr  
-Computer Science @ San José State University  
