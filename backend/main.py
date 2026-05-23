@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from sample_alerts import alerts
 from agent import triage_alert
-from storage import get_memory
+from storage import (get_memory, approve_alert, reject_alert)
 
 app = FastAPI(title="SentinelFlow API")
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,3 +32,27 @@ def triage(alert_id: int):
 @app.get("/memory")
 def memory():
     return get_memory()
+
+@app.post(
+    "/approve/{alert_id}"
+)
+def approve(
+    alert_id: int
+):
+
+    return approve_alert(
+        alert_id,
+        "analyst_1"
+    )
+
+@app.post(
+    "/reject/{alert_id}"
+)
+def reject(
+    alert_id: int
+):
+
+    return reject_alert(
+        alert_id,
+        "analyst_1"
+    )

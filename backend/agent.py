@@ -30,11 +30,28 @@ class RetrievalAgent:
 
 
 class DecisionAgent:
-    def compute_risk_score(self, tool_results):
-        return round(sum(item["score"] for item in tool_results) / len(tool_results), 2)
+    def compute_risk_score(self, alert, tool_results):
+        relevant_scores = []
+        alert_type = alert["type"]
+
+        for item in tool_results:
+            tool = item["tool"]
+            if (alert_type == "phishing" and tool in ["sender_reputation", "phishing_pattern_detector"]):
+                relevant_scores.append(item["score"])
+            elif (alert_type == "dlp" and tool == "sensitive_data_detector"):
+                relevant_scores.append(item["score"])
+            elif (alert_type == "login_anomaly" and tool == "login_anomaly_analyzer"):
+                relevant_scores.append(item["score"])
+        if not relevant_scores:
+            relevant_scores = [item["score"] for item in tool_results]
+        
+        return round(sum(relevant_scores) / len(relevant_scores), 2)
+        
+    
+
 
     def decide(self, alert, tool_results, retrieved_cases):
-        score = self.compute_risk_score(tool_results)
+        score = self.compute_risk_score(alert, tool_results)
 
         if score >= 0.75:
             severity, action = "high", "escalate"
@@ -75,21 +92,17 @@ class ActionAgent:
         - open SOC ticket
         """
         if action == "escalate":
-            if alert["type"] == "phishing":
-                return {
-                    "status": "executed",
-                    "action_taken": "Simulated: quarantined suspicious email and opened SOC incident."
-                }
-            if alert["type"] == "login_anomaly":
-                return {
-                    "status": "executed",
-                    "action_taken": "Simulated: flagged account and required step-up authentication."
-                }
-            if alert["type"] == "dlp":
-                return {
-                    "status": "executed",
-                    "action_taken": "Simulated: blocked external transfer and alerted security team."
-                }
+            return {
+                "status": "pending_review",
+                "action_taken":
+                (
+                    "AI recommends escalation. "
+                    "Awaiting analyst approval "
+                    "before execution."
+                ),
+                "requires_approval": True
+
+            }
 
         if action == "review":
             return {
@@ -148,10 +161,26 @@ Write a concise analyst explanation that:
             "alert_type": alert["type"],
             "title": alert["title"],
             "content": alert["content"],
+
             "severity": severity,
             "action": action,
             "score": score,
-            "execution_status": execution_result["status"],
+
+            "review_status":
+                (
+                    "pending"
+                    if execution_result.get(
+                        "requires_approval",
+                        False
+                    )
+                    else "completed"
+                ),
+            "reviewer": None,
+
+            "approved": False,
+
+            "execution_status":execution_result["status"],
+            
             "execution_action": execution_result["action_taken"],
         }
         save_case(case_record)

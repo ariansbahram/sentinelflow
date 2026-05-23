@@ -15,12 +15,25 @@ def load_cases():
         return json.load(f)
 
 def case_to_text(case):
+
+    indicators = ", ".join(
+        case.get(
+            "indicators",
+            []
+        )
+    )
+
     return (
         f"Type: {case['type']}. "
         f"Content: {case['content']} "
+        f"Indicators: {indicators}. "
         f"Summary: {case['summary']} "
         f"Severity: {case['severity']} "
-        f"Outcome: {case['outcome']}"
+        f"Outcome: {case['outcome']} "
+        f"Recommended Action: "
+        f"{case.get('recommended_action','')} "
+        f"Analyst Notes: "
+        f"{case.get('analyst_notes','')}"
     )
 
 def get_embedding(text: str) -> np.ndarray:

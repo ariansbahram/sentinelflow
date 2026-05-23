@@ -3,32 +3,88 @@
     "id": 1,
     "type": "phishing",
     "content": "Urgent email asking user to reset password through a suspicious login link.",
+    "indicators": ["urgent language", "password reset", "suspicious link"],
     "outcome": "escalate",
     "severity": "high",
-    "summary": "Credential harvesting attempt using urgent language and malicious link."
+    "summary": "Credential harvesting attempt using urgent language and a malicious login link.",
+    "recommended_action": "Quarantine email, block sender domain, and open SOC ticket.",
+    "analyst_notes": "High likelihood of credential theft."
   },
   {
     "id": 2,
-    "type": "login_anomaly",
-    "content": "Multiple failed logins from a foreign IP followed by a successful login.",
+    "type": "phishing",
+    "content": "Email claims the user's Microsoft mailbox is full and asks them to verify storage using an external link.",
+    "indicators": ["brand impersonation", "external link", "account verification"],
     "outcome": "review",
     "severity": "medium",
-    "summary": "Potential account compromise due to abnormal login pattern."
+    "summary": "Possible brand impersonation attempt targeting account credentials.",
+    "recommended_action": "Review link reputation and sender domain before escalation.",
+    "analyst_notes": "Common phishing pattern, but requires URL verification."
   },
   {
     "id": 3,
-    "type": "dlp",
-    "content": "Employee sent spreadsheet containing SSNs to an external email address.",
-    "outcome": "escalate",
-    "severity": "high",
-    "summary": "Sensitive data exfiltration involving personally identifiable information."
+    "type": "login_anomaly",
+    "content": "Multiple failed logins from a foreign IP followed by a successful login.",
+    "indicators": ["foreign IP", "failed attempts", "successful login"],
+    "outcome": "review",
+    "severity": "medium",
+    "summary": "Potential account compromise due to abnormal login behavior.",
+    "recommended_action": "Require step-up authentication and review recent account activity.",
+    "analyst_notes": "Could indicate password spraying or compromised credentials."
   },
   {
     "id": 4,
+    "type": "login_anomaly",
+    "content": "User logged in from California and then from Russia within 12 minutes.",
+    "indicators": ["impossible travel", "geographic anomaly", "rapid login sequence"],
+    "outcome": "escalate",
+    "severity": "high",
+    "summary": "Impossible travel login pattern suggesting account compromise.",
+    "recommended_action": "Temporarily lock account, require password reset, and notify identity team.",
+    "analyst_notes": "Impossible travel events should not be auto-closed."
+  },
+  {
+    "id": 5,
+    "type": "dlp",
+    "content": "Employee sent spreadsheet containing SSNs to an external email address.",
+    "indicators": ["SSN", "external recipient", "spreadsheet attachment"],
+    "outcome": "escalate",
+    "severity": "high",
+    "summary": "Sensitive data exfiltration involving personally identifiable information.",
+    "recommended_action": "Block transfer, alert security team, and notify compliance if required.",
+    "analyst_notes": "PII exposure requires human review and audit logging."
+  },
+  {
+    "id": 6,
+    "type": "dlp",
+    "content": "Employee attempted to upload confidential customer records to a personal cloud storage account.",
+    "indicators": ["customer records", "personal cloud storage", "confidential data"],
+    "outcome": "escalate",
+    "severity": "high",
+    "summary": "Potential data loss involving confidential customer records.",
+    "recommended_action": "Block upload, preserve evidence, and escalate to DLP team.",
+    "analyst_notes": "External storage transfer increases risk of data exposure."
+  },
+  {
+    "id": 7,
     "type": "benign",
     "content": "Weekly internal HR newsletter with no attachments or suspicious links.",
+    "indicators": ["internal sender", "no attachments", "no suspicious links"],
     "outcome": "close",
     "severity": "low",
-    "summary": "Benign internal communication incorrectly flagged."
+    "summary": "Benign internal communication incorrectly flagged.",
+    "recommended_action": "Close alert and record as false positive.",
+    "analyst_notes": "Useful for reducing alert fatigue."
+  },
+  {
+    "id": 8,
+    "type": "benign",
+    "content": "Employee received a calendar reminder from an internal company domain.",
+    "indicators": ["internal domain", "calendar reminder", "expected communication"],
+    "outcome": "close",
+    "severity": "low",
+    "summary": "Normal internal notification with no suspicious indicators.",
+    "recommended_action": "Close alert with no action needed.",
+    "analyst_notes": "Low-risk alert suitable for auto-closure."
   }
 ]
