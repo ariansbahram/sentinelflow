@@ -1,3 +1,4 @@
+import time
 from openai import OpenAI
 from config import OPENAI_API_KEY, CHAT_MODEL
 from tools import (
@@ -8,6 +9,7 @@ from tools import (
 )
 from rag import CaseRetriever
 from storage import save_case
+
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 retriever = CaseRetriever()
@@ -148,12 +150,25 @@ Write a concise analyst explanation that:
 4. mentions the simulated action taken,
 5. is clear enough for an enterprise SOC dashboard.
 """
+        
+        llm_start = time.time()
 
         response = client.chat.completions.create(
             model=CHAT_MODEL,
             messages=[{"role": "user", "content": prompt}]
         )
-        return response.choices[0].message.content
+
+        llm_latency = (
+            time.time() - llm_start
+        ) * 1000
+
+        return {
+            "reasoning":
+                response.choices[0].message.content,
+
+            "llm_latency":
+                llm_latency
+        }
 
     def log_case(self, alert, severity, action, score, execution_result):
         case_record = {
@@ -187,6 +202,7 @@ Write a concise analyst explanation that:
 
 
 def triage_alert(alert):
+    workflow_start = time.time()
     steps = []
 
     detection_agent = DetectionAgent()
@@ -200,7 +216,14 @@ def triage_alert(alert):
     tool_results = detection_agent.analyze(alert)
     steps.append("Detection Agent: Analyzed sender reputation, phishing patterns, sensitive data, and login anomalies.")
 
+    retrieval_start = time.time()
+
     retrieved_cases = retrieval_agent.retrieve_context(alert, k=2)
+
+    retrieval_latency = (
+    time.time() - retrieval_start
+    ) * 1000
+
     steps.append("Retrieval Agent: Retrieved similar historical incidents from vector store.")
 
     decision = decision_agent.decide(alert, tool_results, retrieved_cases)
@@ -213,7 +236,7 @@ def triage_alert(alert):
     execution_result = action_agent.execute(alert, severity, action)
     steps.append(f"Action Agent: {execution_result['action_taken']}")
 
-    reasoning = audit_agent.generate_reasoning(
+    reasoning_result = audit_agent.generate_reasoning(
         alert=alert,
         tool_results=tool_results,
         retrieved_cases=retrieved_cases,
@@ -222,11 +245,37 @@ def triage_alert(alert):
         execution_result=execution_result,
         guardrail_note=guardrail_note,
     )
+    reasoning = reasoning_result["reasoning"]
+    llm_latency = reasoning_result["llm_latency"]
+
+
     steps.append("Audit Agent: Generated analyst-facing explanation.")
 
     audit_agent.log_case(alert, severity, action, score, execution_result)
     steps.append("Learning: Stored case outcome and simulated execution details for future analysis.")
 
+
+    total_workflow_latency = (
+    time.time() - workflow_start
+    ) * 1000
+
+    workflow_metrics = {
+
+        "retrieval_latency_ms":
+            round(retrieval_latency, 2),
+
+        "llm_latency_ms":
+            round(llm_latency, 2),
+
+        "total_workflow_latency_ms":
+            round(total_workflow_latency, 2),
+
+        "tools_used":
+            len(tool_results),
+
+        "retrieved_cases":
+            len(retrieved_cases),
+}
     return {
         "alert_id": alert["id"],
         "severity": severity,
@@ -237,5 +286,6 @@ def triage_alert(alert):
         "execution_result": execution_result,
         "reasoning": reasoning,
         "steps": steps,
+        "workflow_metrics": workflow_metrics,
         "auto_resolved": action == "close",
     }
